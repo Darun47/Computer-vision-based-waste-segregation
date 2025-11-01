@@ -34,7 +34,7 @@ def load_real_model():
     """
     try:
         # OPTION 1: If model is in your Google Drive (mounted in Colab)
-        model_path = "/content/drive/MyDrive/DATA./data/model/waste_classifier.h5"
+        model_path = "waste_classifier.h5"
         
         # OPTION 2: If you uploaded model to Streamlit cloud
         # model_path = "waste_classifier.h5"
