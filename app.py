@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 import os
 import requests
-import gdown
+
 
 # Set page configuration
 st.set_page_config(
