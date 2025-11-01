@@ -17,7 +17,7 @@ st.set_page_config(
 
 # Your Google Drive shareable link (you'll need to update this)
 MODEL_URL = "https://drive.google.com/drive/folders/1rwnhNUXqs-wSKgek5ZoVbrVI-uRNL1jr"
-MODEL_PATH = "/content/drive/MyDrive/DATA./data/models/waste_classifier.h5"
+MODEL_PATH = "/content/drive/MyDrive/DATA./data/models"
 
 @st.cache_resource
 def download_and_load_high_accuracy_model():
