@@ -1,5 +1,5 @@
+#Overview
 ♻️ SmartWasteAI
-Overview
 Smart waste classification is a deep learning-based application of computer vision for classifying wastes into categories such as Biodegradable, Recyclable, and Hazardous. Using transfer learning with MobileNetV2 architecture, this system achieves high accuracy while maintaining computational efficiency. The solution is deployed on a Streamlit web interface for real-time waste recognition, enabling smart city waste management.
 
 🚀Live Demo https://computer-vision-based-waste-segregation-vnewsecs6xzcxzc6g3bkdb.streamlit.app/
