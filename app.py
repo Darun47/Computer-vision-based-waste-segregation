@@ -1,134 +1,194 @@
 import streamlit as st
-import torch
-import torchvision.transforms as transforms
-from PIL import Image
 import numpy as np
+from PIL import Image
+import tensorflow as tf
+from tensorflow.keras.models import load_model
 import cv2
+import os
+from model_architecture import create_smartwaste_model, preprocess_image, predict_waste
 
-# Set page config
+# Page configuration
 st.set_page_config(
-    page_title="Waste Segregation AI",
-    page_icon="🗑️",
-    layout="centered"
+    page_title="SmartWasteAI",
+    page_icon="♻️",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# Title and description
-st.title("🗑️ AI Waste Segregation System")
-st.markdown("Upload an image of waste item to classify it as Biodegradable, Hazardous, or Recyclable")
-
-# File uploader
-uploaded_file = st.file_uploader(
-    "Choose a waste image...", 
-    type=['jpg', 'jpeg', 'png']
-)
-
-# Load your model (adjust this based on your actual model)
-@st.cache_resource
-def load_model():
-    # Replace this with your actual model loading code
-    # Example:
-    # model = torch.load('waste_model.pth')
-    # model.eval()
-    
-    # For now, returning None as placeholder
-    return None
-
-model = load_model()
-
-# Class names (adjust based on your model)
-class_names = ['Biodegradable', 'Hazardous', 'Recyclable']
-
-def preprocess_image(image):
-    """Preprocess the image for model prediction"""
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], 
-                           std=[0.229, 0.224, 0.225])
-    ])
-    return transform(image).unsqueeze(0)
-
-def predict_waste(image, model):
-    """Make prediction on the image"""
-    # Preprocess
-    processed_image = preprocess_image(image)
-    
-    # Make prediction (replace with your actual prediction code)
-    # with torch.no_grad():
-    #     outputs = model(processed_image)
-    #     probabilities = torch.nn.functional.softmax(outputs, dim=1)
-    #     predicted_class = torch.argmax(probabilities, 1)
-    
-    # For demo purposes - replace with your actual model prediction
-    # This is just placeholder logic
-    probabilities = [0.00, 1.00, 0.00]  # Example: Hazardous
-    predicted_idx = 1  # Hazardous
-    
-    return predicted_idx, probabilities
-
-if uploaded_file is not None:
-    # Display the uploaded image
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image', use_column_width=True)
-    
-    # Make prediction
-    with st.spinner('Analyzing waste type...'):
-        predicted_idx, probabilities = predict_waste(image, model)
-    
-    # Display results
-    st.subheader("🔍 Prediction Results")
-    
-    # Color coding for bins
-    bin_colors = {
-        'Biodegradable': '🟢 Green Bin',
-        'Hazardous': '🔴 Red Bin', 
-        'Recyclable': '🔵 Blue Bin'
+# Custom CSS
+st.markdown("""
+<style>
+    .main-header {
+        font-size: 3rem;
+        color: #2E8B57;
+        text-align: center;
+        margin-bottom: 2rem;
     }
+    .prediction-box {
+        padding: 20px;
+        border-radius: 10px;
+        margin: 10px 0;
+        text-align: center;
+    }
+    .recyclable {
+        background-color: #90EE90;
+        border: 2px solid #2E8B57;
+    }
+    .non-recyclable {
+        background-color: #FFB6C1;
+        border: 2px solid #DC143C;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+def main():
+    # Header
+    st.markdown('<h1 class="main-header">♻️ SmartWasteAI</h1>', unsafe_allow_html=True)
+    st.markdown("### AI-Powered Waste Classification System")
     
-    predicted_class = class_names[predicted_idx]
-    recommended_bin = bin_colors[predicted_class]
+    # Sidebar
+    st.sidebar.title("Navigation")
+    app_mode = st.sidebar.selectbox("Choose Mode", 
+                                   ["Home", "Image Classification", "About"])
     
-    # Prediction and confidence
+    if app_mode == "Home":
+        show_home()
+    elif app_mode == "Image Classification":
+        show_classification()
+    else:
+        show_about()
+
+def show_home():
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        st.markdown("""
+        ## Welcome to SmartWasteAI!
+        
+        **SmartWasteAI** is an intelligent waste classification system that helps:
+        
+        - 🏠 **Households** properly sort their waste
+        - 🏢 **Businesses** improve recycling efficiency
+        - 🌍 **Communities** reduce contamination in recycling streams
+        
+        ### How it works:
+        1. Upload an image of waste item
+        2. Our AI model analyzes the image
+        3. Get instant classification: Recyclable or Non-Recyclable
+        4. Receive proper disposal guidance
+        
+        ### Supported Waste Types:
+        - Plastic bottles & containers
+        - Paper & cardboard
+        - Glass items
+        - Metal cans
+        - Organic waste
+        - Electronic waste
+        - And more!
+        """)
+    
+    with col2:
+        st.image("https://images.unsplash.com/photo-1587334894137-85e7befb7597?w=400", 
+                 caption="Smart Waste Management")
+        st.info("💡 **Tip**: Take clear, well-lit photos for best results!")
+
+def show_classification():
+    st.markdown("## 🖼️ Waste Classification")
+    
+    # File upload
+    uploaded_file = st.file_uploader(
+        "Upload an image of waste item", 
+        type=['jpg', 'jpeg', 'png', 'bmp'],
+        help="Supported formats: JPG, JPEG, PNG, BMP"
+    )
+    
     col1, col2 = st.columns(2)
     
     with col1:
-        st.metric(
-            label="Prediction",
-            value=predicted_class,
-            delta="High Confidence" if max(probabilities) > 0.8 else "Medium Confidence"
-        )
-    
-    with col2:
-        st.metric(
-            label="Confidence",
-            value=f"{max(probabilities)*100:.2f}%"
-        )
-    
-    # Recommended bin
-    st.info(f"**Recommended Bin:** {recommended_bin}")
-    
-    # Probabilities chart
-    st.subheader("📊 All Probabilities")
-    
-    for i, (class_name, prob) in enumerate(zip(class_names, probabilities)):
-        percentage = prob * 100
-        
-        # Progress bar with color coding
-        if class_name == predicted_class:
-            st.progress(prob, text=f"**{class_name}: {percentage:.2f}%**")
-        else:
-            st.progress(prob, text=f"{class_name}: {percentage:.2f}%")
+        if uploaded_file is not None:
+            # Display uploaded image
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Uploaded Image", use_column_width=True)
+            
+            # Process image
+            if st.button("🔍 Analyze Waste", type="primary"):
+                with st.spinner("Analyzing waste type..."):
+                    try:
+                        # Preprocess and predict
+                        processed_image = preprocess_image(image)
+                        prediction, confidence = predict_waste(processed_image)
+                        
+                        # Display results
+                        with col2:
+                            st.markdown("## 📊 Analysis Results")
+                            
+                            # Confidence gauge
+                            st.metric("Confidence", f"{confidence:.2%}")
+                            
+                            # Prediction box
+                            if prediction == "Recyclable":
+                                st.markdown(
+                                    f'<div class="prediction-box recyclable">'
+                                    f'<h2>♻️ RECYCLABLE</h2>'
+                                    f'<p>This item can be recycled!</p>'
+                                    f'</div>', 
+                                    unsafe_allow_html=True
+                                )
+                                
+                                st.markdown("""
+                                ### ✅ Proper Disposal:
+                                - Clean and dry the item
+                                - Place in recycling bin
+                                - Remove any non-recyclable parts
+                                """)
+                            else:
+                                st.markdown(
+                                    f'<div class="prediction-box non-recyclable">'
+                                    f'<h2>🚫 NON-RECYCLABLE</h2>'
+                                    f'<p>This item should go in general waste</p>'
+                                    f'</div>', 
+                                    unsafe_allow_html=True
+                                )
+                                
+                                st.markdown("""
+                                ### 🗑️ Proper Disposal:
+                                - Place in general waste bin
+                                - Consider alternatives to reduce waste
+                                - Check local guidelines for special disposal
+                                """)
+                        
+                    except Exception as e:
+                        st.error(f"Error processing image: {str(e)}")
+                        st.info("Please try another image or check the file format.")
 
-# Add some information
-st.markdown("---")
-st.markdown("""
-### 🎯 How to Use:
-1. Upload a clear image of a waste item
-2. Wait for AI analysis
-3. Check the prediction and recommended disposal bin
+def show_about():
+    st.markdown("""
+    ## About SmartWasteAI
+    
+    **SmartWasteAI** is built using state-of-the-art deep learning technology 
+    to help solve the global waste management challenge.
+    
+    ### Technology Stack:
+    - **Framework**: TensorFlow/Keras
+    - **Frontend**: Streamlit
+    - **Computer Vision**: Convolutional Neural Networks
+    - **Deployment**: Streamlit Cloud/Heroku
+    
+    ### Model Features:
+    - High accuracy waste classification
+    - Real-time processing
+    - Support for multiple image formats
+    - Scalable architecture
+    
+    ### Environmental Impact:
+    By helping people properly sort waste, we aim to:
+    - Increase recycling rates
+    - Reduce contamination in recycling streams
+    - Promote sustainable waste management practices
+    
+    ---
+    *Built with ❤️ for a cleaner planet*
+    """)
 
-### 📁 Supported Waste Types:
-- **Biodegradable**: Food waste, paper, garden waste
-- **Hazardous**: Batteries, chemicals, electronics  
-- **Recyclable**: Plastic, glass, metal, cardboard
-""")
+if __name__ == "__main__":
+    main()
