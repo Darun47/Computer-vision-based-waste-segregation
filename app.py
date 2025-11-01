@@ -6,21 +6,21 @@ import numpy as np
 from PIL import Image
 import os
 
-# Set page configuration
+
 st.set_page_config(
     page_title="SmartWasteAI - Waste Classification System",
     page_icon="🗑️",
     layout="centered"
 )
 
-# ========== CORRECTED MODEL LOADING CODE ==========
+
 @st.cache_resource
 def load_real_model():
     """
     Load your actual trained model with the CORRECT path
     """
     try:
-        # CORRECTED MODEL PATH - with the dot as it actually exists
+       
         model_path = "waste_classifier.h5"
         
         st.sidebar.info(f"🔍 Looking for model at: {model_path}")
@@ -34,7 +34,7 @@ def load_real_model():
         else:
             st.sidebar.error(f"❌ Model not found at: {model_path}")
             
-            # Debug: Show what's actually in the directory
+          
             debug_path = "/content/drive/MyDrive/DATA./models/"
             if os.path.exists(debug_path):
                 files = os.listdir(debug_path)
@@ -54,7 +54,7 @@ def load_real_model():
 model = load_real_model()
 # ========== END OF MODEL LOADING CODE ==========
 
-# Define class labels
+
 class_labels = {
     0: {'name': 'Biodegradable', 'bin_color': 'Green', 'bin_emoji': '🟢', 
         'bin_info': 'For organic waste like food scraps, garden waste, paper products.'},
