@@ -20,7 +20,6 @@ def load_real_model():
     Load your actual trained model with the CORRECT path
     """
     try:
-       
         model_path = "waste_classifier.h5"
         
         st.sidebar.info(f"🔍 Looking for model at: {model_path}")
