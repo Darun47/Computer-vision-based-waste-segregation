@@ -1,14 +1,7 @@
 ♻️ SmartWasteAI
-https://static.streamlit.io/badges/streamlit_badge_black_white.svg
-https://img.shields.io/badge/Python-3.8%252B-blue
-https://img.shields.io/badge/TensorFlow-2.13%252B-orange
+Overview
+Smart waste classification is a deep learning-based application of computer vision for classifying wastes into categories such as Biodegradable, Recyclable, and Hazardous. Using transfer learning with MobileNetV2 architecture, this system achieves high accuracy while maintaining computational efficiency. The solution is deployed on a Streamlit web interface for real-time waste recognition, enabling smart city waste management.
 
-An AI-powered waste classification system that uses deep learning to sort waste into Biodegradable, Recyclable, and Hazardous categories.
-
-🚀 Live Demo
-Try it here!
-
-Upload a waste image and get instant AI classification with disposal recommendations.
 
 🎯 Features
 AI Classification: Real-time waste sorting using MobileNetV2
@@ -42,12 +35,13 @@ Streamlit 1.28+
 Pillow 10.0+
 
 🏗️ Project Structure
-text
-├── app.py                 # Main Streamlit application
-├── waste_classifier.h5    # Trained model (25.1 MB)
-├── requirements.txt       # Dependencies
-└── README.md             # Documentation
-🎓 Usage
+Computer-vision-based-waste-segregation/
+├── app.py                # Main Streamlit application
+├── waste_classifier.h5   # Trained model (25.1 MB)
+├── requirements.txt      # Python dependencies
+├── .gitattributes        # Git LFS configuration
+├── code_.txt             # Development notebooks
+└── README.md             # Project documentation
 Upload a waste image (JPG, PNG, JPEG)
 
 Wait for AI analysis (2-3 seconds)
@@ -75,7 +69,8 @@ IoT smart bin integration
 Multi-language support
 
 👨‍💻 Author
-Abhinav Chanakya
+S. DARUN 
+1000309
 IBCP Student - Artificial Intelligence
 Meluha International School
 
