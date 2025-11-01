@@ -35,7 +35,7 @@ def load_real_model():
             st.sidebar.error(f"❌ Model not found at: {model_path}")
             
             # Debug: Show what's actually in the directory
-            debug_path = "/content/drive/MyDrive/DATA./models/"
+            debug_path = "/content/drive/MyDrive/DATA./models/waste_classifier.h5"
             if os.path.exists(debug_path):
                 files = os.listdir(debug_path)
                 st.sidebar.info(f"📁 Files in models directory: {files}")
