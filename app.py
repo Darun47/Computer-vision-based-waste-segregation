@@ -5,8 +5,6 @@ from tensorflow.keras.preprocessing import image
 import numpy as np
 from PIL import Image
 import os
-import requests
-
 
 # Set page configuration
 st.set_page_config(
@@ -15,31 +13,27 @@ st.set_page_config(
     layout="centered"
 )
 
-# ========== ADD YOUR MODEL LOADING CODE HERE ==========
+# ========== CORRECTED MODEL LOADING CODE ==========
 @st.cache_resource
 def load_real_model():
     """
-    Load your actual trained model
-    Replace the model path with your actual model file location
+    Load your actual trained model with the correct path
     """
     try:
-        # OPTION 1: If model is in your Google Drive (mounted in Colab)
+        # YOUR CORRECT MODEL PATH
         model_path = "/content/drive/MyDrive/DATA./models/waste_classifier.h5"
         
-        # OPTION 2: If you uploaded model to Streamlit cloud
-        # model_path = "waste_classifier.h5"
-        
-        # OPTION 3: Download from Google Drive
-        # model_path = "downloaded_model.h5"
-        # if not os.path.exists(model_path):
-        #     gdown.download('https://drive.google.com/uc?id=YOUR_FILE_ID', model_path, quiet=False)
+        st.sidebar.info(f"🔍 Looking for model at: {model_path}")
         
         if os.path.exists(model_path):
+            st.sidebar.success("✅ Model file found! Loading...")
             model = load_model(model_path)
-            st.sidebar.success("✅ Real AI Model Loaded Successfully!")
+            st.sidebar.success("🤖 Real AI Model Loaded Successfully!")
+            st.sidebar.info("🎯 High-accuracy mode activated")
             return model
         else:
-            st.sidebar.warning("⚠️ Model file not found. Using demo mode.")
+            st.sidebar.error(f"❌ Model not found at: {model_path}")
+            st.sidebar.info("💡 Using demo mode instead")
             return None
             
     except Exception as e:
@@ -96,7 +90,8 @@ def predict_waste(img_array):
             confidence = np.max(predictions[0])
             return predicted_class, confidence
         except Exception as e:
-            st.sidebar.warning(f"Model prediction failed, using demo mode: {e}")
+            st.sidebar.warning(f"Model prediction failed: {e}")
+            return predict_waste_demo(img_array)
     
     # Fallback to demo mode
     return predict_waste_demo(img_array)
@@ -105,14 +100,14 @@ def predict_waste(img_array):
 st.title("♻️ SmartWasteAI")
 st.markdown("### AI-Powered Waste Classification System")
 
-# Model status
+# Model status in sidebar
 st.sidebar.header("🔧 System Status")
 if model:
-    st.sidebar.success("🤖 AI Model: **Loaded**")
-    st.sidebar.info("🎯 Mode: **High-Accuracy AI**")
+    st.sidebar.success("🤖 **AI Model: LOADED**")
+    st.sidebar.info("🎯 **Mode: High-Accuracy AI**")
 else:
-    st.sidebar.warning("🤖 AI Model: **Demo Mode**")
-    st.sidebar.info("💡 Upload images to test the system")
+    st.sidebar.warning("🤖 **AI Model: DEMO MODE**")
+    st.sidebar.info("💡 **Upload images to test the system**")
 
 st.write("Upload an image of waste for AI-powered classification and sorting recommendations.")
 
@@ -179,14 +174,17 @@ if uploaded_file is not None:
             with prob_col1:
                 bio_prob = predictions[0]
                 st.metric("🟢 Biodegradable", f"{bio_prob:.2%}")
+                st.progress(float(bio_prob))
             
             with prob_col2:
                 haz_prob = predictions[1]
                 st.metric("🔴 Hazardous", f"{haz_prob:.2%}")
+                st.progress(float(haz_prob))
             
             with prob_col3:
                 rec_prob = predictions[2]
                 st.metric("🔵 Recyclable", f"{rec_prob:.2%}")
+                st.progress(float(rec_prob))
         else:
             st.warning("""
             **💡 Demo Mode Active** 
@@ -197,22 +195,43 @@ if uploaded_file is not None:
     except Exception as e:
         st.error(f"❌ Error processing image: {str(e)}")
 
+# Instructions
+with st.expander("📖 How to Use This System"):
+    st.markdown("""
+    1. **Upload** a clear image of waste items
+    2. **Wait** for AI analysis (2-3 seconds)
+    3. **View** the classification results
+    4. **Follow** the disposal recommendations
+    
+    **Supported Waste Types:**
+    - 🟢 **Biodegradable**: Food waste, paper, organic materials
+    - 🔵 **Recyclable**: Plastic, glass, metal, cardboard  
+    - 🔴 **Hazardous**: Batteries, chemicals, electronics
+    """)
+
 # System information
 st.markdown("---")
-st.markdown("### 🏢 SmartWasteAI - Waste Classification System")
-st.markdown("""
-**🎯 Features:**
-- AI-powered waste classification
-- Smart bin recommendations  
-- Educational waste management
-- Real-time processing
+st.markdown("### 🏢 About SmartWasteAI")
 
-**🔧 Technology:**
-- TensorFlow Deep Learning
-- Computer Vision
-- MobileNetV2 Architecture
-- Streamlit Web Interface
-""")
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("""
+    **🎯 Project Features:**
+    - AI-powered waste classification
+    - Smart city integration ready
+    - Real-time processing
+    - Educational tool for waste management
+    """)
+
+with col2:
+    st.markdown("""
+    **🔧 Technical Stack:**
+    - TensorFlow Deep Learning
+    - Computer Vision
+    - Streamlit Web Interface
+    - MobileNetV2 Architecture
+    """)
 
 # Footer
 st.markdown("---")
@@ -220,8 +239,8 @@ st.markdown(
     """
     <div style='text-align: center; background-color: #f0f2f6; padding: 20px; border-radius: 10px;'>
         <h3>🎓 Academic Project - SmartWasteAI</h3>
-        <p><b>Machine Learning & Deep Learning Course</b></p>
-        <p>AI-Powered Waste Classification System</p>
+        <p><b>Machine Learning & Deep Learning Course</b> | Computer Vision in Action</p>
+        <p>Waste Classification System for Smart Cities</p>
     </div>
     """,
     unsafe_allow_html=True
