@@ -21,7 +21,7 @@ def load_real_model():
     """
     try:
         # CORRECTED MODEL PATH - with the dot as it actually exists
-        model_path = "/content/drive/MyDrive/DATA./data/models/waste_classifier.h5"
+        model_path = "/content/drive/MyDrive/DATA./models/waste_classifier.h5"
         
         st.sidebar.info(f"🔍 Looking for model at: {model_path}")
         
@@ -35,7 +35,7 @@ def load_real_model():
             st.sidebar.error(f"❌ Model not found at: {model_path}")
             
             # Debug: Show what's actually in the directory
-            debug_path = "/content/drive/MyDrive/DATA./models/waste_classifier.h5"
+            debug_path = "/content/drive/MyDrive/DATA./models/"
             if os.path.exists(debug_path):
                 files = os.listdir(debug_path)
                 st.sidebar.info(f"📁 Files in models directory: {files}")
