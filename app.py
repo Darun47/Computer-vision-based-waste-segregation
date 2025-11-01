@@ -25,9 +25,41 @@ class_labels = {
         'bin_info': 'For materials that can be recycled like plastic, glass, metal, cardboard.'}
 }
 
-# Initialize model as None
-model = None
+# ========== ADD YOUR MODEL LOADING CODE HERE ==========
+@st.cache_resource
+def load_real_model():
+    """
+    Load your actual trained model
+    Replace the model path with your actual model file location
+    """
+    try:
+        # OPTION 1: If model is in your Google Drive (mounted in Colab)
+        model_path = "/content/drive/MyDrive/DATA./data/models/waste_classifier.h5"
+        
+        # OPTION 2: If you uploaded model to Streamlit cloud
+        # model_path = "waste_classifier.h5"
+        
+        # OPTION 3: Download from Google Drive (use direct download link)
+        # model_path = "downloaded_model.h5"
+        # if not os.path.exists(model_path):
+        #     gdown.download('https://drive.google.com/uc?id=YOUR_FILE_ID', model_path, quiet=False)
+        
+        if os.path.exists(model_path):
+            model = load_model(model_path)
+            st.sidebar.success("✅ Real AI Model Loaded Successfully!")
+            return model
+        else:
+            st.sidebar.warning("⚠️ Model file not found. Using demo mode.")
+            return None
+            
+    except Exception as e:
+        st.sidebar.error(f"❌ Model loading failed: {str(e)}")
+        st.sidebar.info("💡 Using demo mode temporarily")
+        return None
 
+# Load the model
+model = load_real_model()
+# ========== END OF MODEL LOADING CODE ==========
 def preprocess_image(img):
     """Preprocess image exactly like during training"""
     img = img.resize((224, 224))
