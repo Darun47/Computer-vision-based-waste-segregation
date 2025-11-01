@@ -21,7 +21,7 @@ def load_real_model():
     """
     try:
         # CORRECTED MODEL PATH - with the dot as it actually exists
-        model_path = "/content/drive/MyDrive/DATA./models/model/waste_classifier.h5"
+        model_path = "waste_classifier.h5"
         
         st.sidebar.info(f"🔍 Looking for model at: {model_path}")
         
