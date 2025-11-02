@@ -83,3 +83,12 @@ Meluha International School
 
 📄 License
 MIT License - see LICENSE file for details.
+
+# Screenshot
+<img width="532" height="782" alt="Screenshot 2025-11-02 094017" src="https://github.com/user-attachments/assets/804859b7-23f6-4ef0-99af-bf428135642c" />
+<img width="412" height="810" alt="Screenshot 2025-11-02 094214" src="https://github.com/user-attachments/assets/71308568-82da-4809-8e88-cf97258a94d0" />
+<img width="395" height="764" alt="Screenshot 2025-11-02 094430" src="https://github.com/user-attachments/assets/aaa5355f-8565-40d9-bceb-2391dbfa76a1" />
+
+
+
+
