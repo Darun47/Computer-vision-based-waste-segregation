@@ -1,23 +1,23 @@
 # Overview
 ♻️ SmartWasteAI
 
-Smart waste classification is a deep learning-based application of computer vision for classifying wastes into categories such as Biodegradable, Recyclable, and Hazardous. Using transfer learning with MobileNetV2 architecture, this system achieves high accuracy while maintaining computational efficiency. The solution is deployed on a Streamlit web interface for real-time waste recognition, enabling smart city waste management.
+computer vision is used in smart waste sorting to separate trash into groups like Biodegredable, Recyclable and Hazardous. This system applies transfer learning using the architecture of MobileNetV2 for high accuracy with computational efficiency. The final solution is implemented in  the Streamlit web interface, to recognize real-time wastes and enable smart city waste management.
 
 🚀Live Demo https://computer-vision-based-waste-segregation-vnewsecs6xzcxzc6g3bkdb.streamlit.app/
 
-🎯 Features
-AI Classification: Real-time waste sorting using MobileNetV2
+🎯Characteristics: AI Classification: MobileNetV2-based real-time garbage sorting
 
-Three Categories: 🟢 Biodegradable, 🔵 Recyclable, 🔴 Hazardous
+Three Types: 🟢 Biodegradable, 🔵 Recyclable, 🔴 Hazardous
 
 High Accuracy: 93.8% validation accuracy
 
-User-Friendly: Simple web interface built with Streamlit
+User-friendly: Streamlit was used to create a straight forward online interface.
 
-Confidence Scores: Transparent probability metrics
+Confidence Scores: Explicit measures of probability
 
-🛠️ Installation
+🛠️ Installation?
 bash
+
 # Clone repository
 git clone https://github.com/Darun47/Computer-vision-based-waste-segregation.git
 cd Computer-vision-based-waste-segregation
@@ -39,10 +39,15 @@ Pillow 10.0+
 🏗️ Project Structure
 Computer-vision-based-waste-segregation/
 ├── app.py                # Main Streamlit application
+
 ├── waste_classifier.h5   # Trained model (25.1 MB)
+
 ├── requirements.txt      # Python dependencies
+
 ├── .gitattributes        # Git LFS configuration
+
 ├── code_.txt             # Development notebooks
+
 └── README.md             # Project documentation
 Upload a waste image (JPG, PNG, JPEG)
 
