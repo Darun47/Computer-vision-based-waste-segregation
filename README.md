@@ -77,7 +77,7 @@ Multi-language support
 
 👨‍💻 Author
 S. DARUN 
-1000309
+Registration no: 1000309
 IBCP Student - Artificial Intelligence
 Meluha International School
 
