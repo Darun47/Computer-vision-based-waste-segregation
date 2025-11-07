@@ -81,8 +81,6 @@ Registration no: 1000309
 IBCP Student - Artificial Intelligence
 Meluha International School
 
-📄 License
-MIT License - see LICENSE file for details.
 
 # Screenshot
 <img width="532" height="782" alt="Screenshot 2025-11-02 094017" src="https://github.com/user-attachments/assets/804859b7-23f6-4ef0-99af-bf428135642c" />
